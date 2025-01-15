@@ -3,9 +3,9 @@ package com.chessgame.model;
 import java.util.List;
 
 public abstract class Piece {
-    private boolean isWhite;
-    private int value;
-    private boolean isCaptured;
+    protected boolean isWhite;
+    protected int value;
+    protected boolean isCaptured;
 
     public Piece(boolean isWhite, int value) {
         this.isWhite = isWhite;
