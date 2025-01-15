@@ -13,14 +13,14 @@ public class Pawn extends Piece{
         List<Position> moves = new ArrayList<Position>();
 
         // Find what colour the pawn is
-        boolean isPieceWhite = this.isWhite;
+        boolean isPawnWhite = this.isWhite;
 
         // Check if the piece is on starting rank
         // This will affect their possible forward moves
-        int startingRank = isPieceWhite ? 2 : 7;
+        int startingRank = isPawnWhite ? 2 : 7;
 
         // Forward moves
-        int forward = isPieceWhite ? 1 : -1;
+        int forward = isPawnWhite ? 1 : -1;
 
         Position oneForward = new Position(pos.getRank() + forward, pos.getFile()); // one move forward
         moves.add(oneForward);
