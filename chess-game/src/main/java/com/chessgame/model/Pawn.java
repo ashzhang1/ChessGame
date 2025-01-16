@@ -9,6 +9,7 @@ public class Pawn extends Piece{
         super(isWhite, PieceValue.PAWN.getValue());
     }
 
+    @Override
     public List<Position> getBasicMoves(Position pos) {
         List<Position> moves = new ArrayList<Position>();
 

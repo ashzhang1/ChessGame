@@ -15,9 +15,10 @@ public abstract class Piece {
 
     public abstract List<Position> getBasicMoves(Position pos);
 
-    public boolean move(Position pos) {
-        return true;
+
+
+    protected boolean moveWithinBounds(Position pos) {
+        return pos.getRank() >= 0 && pos.getRank() <= 7 &&
+                pos.getFile() >= 0 && pos.getFile() <= 7;
     }
-
-
 }
