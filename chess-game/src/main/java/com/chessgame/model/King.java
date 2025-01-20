@@ -6,14 +6,14 @@ import java.util.List;
 public class King extends Piece{
 
     private static final int[][] KING_MOVES = {
-            {1, 0},
-            {1, 1},
-            {0, 1},
-            {-1, 1},
-            {-1, 0},
-            {-1, -1},
-            {0, -1},
-            {1, -1}
+            {0, 1},   // North
+            {1, 1},   // North-East
+            {1, 0},   // East
+            {1, -1},  // South-East
+            {0, -1},  // South
+            {-1, -1}, // South-West
+            {-1, 0},  // West
+            {-1, 1}   // North-West
     };
 
     public King(boolean isWhite) {
@@ -26,8 +26,8 @@ public class King extends Piece{
 
         for (int[] move : KING_MOVES) {
 
-            int newRank = pos.getRank() + move[0];
-            int newFile = pos.getFile() + move[1];
+            int newFile = pos.getFile() + move[0];
+            int newRank = pos.getRank() + move[1];
 
             if (!moveWithinBounds(new Position(newRank, newFile))) {
                 continue;

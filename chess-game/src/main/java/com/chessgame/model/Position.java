@@ -1,13 +1,13 @@
 package com.chessgame.model;
 
 public class Position {
-    private int rank;
     private int file;
+    private int rank;
 
     // Constructor
-    public Position(int rank, int file) {
-        this.rank = rank;
+    public Position(int file, int rank) {
         this.file = file;
+        this.rank = rank;
     }
 
     // Getters

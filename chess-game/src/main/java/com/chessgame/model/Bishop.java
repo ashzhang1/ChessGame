@@ -6,10 +6,10 @@ import java.util.List;
 public class Bishop extends Piece{
 
     private static final int[][] BISHOP_DIRECTIONS = {
-            {1, 1}, // North-East
-            {1, -1}, // South-East
-            {-1, -1}, // South-West
-            {-1, 1} // North-West
+        {1, 1},   // North-East (file increase, rank increase)
+        {1, -1},  // South-East (file increase, rank decrease)
+        {-1, -1}, // South-West (file decrease, rank decrease)
+        {-1, 1}   // North-West (file decrease, rank increase)
     };
 
     public Bishop(boolean isWhite) {
@@ -22,14 +22,15 @@ public class Bishop extends Piece{
 
         for (int[] direction : BISHOP_DIRECTIONS) {
             for (int step = 1; step <= 7; step++) {
-                int newRank = pos.getRank() + (direction[0] * step);
-                int newFile = pos.getFile() + (direction[1] * step);
 
-                if (!moveWithinBounds(new Position(newRank, newFile))) {
+                int newFile = pos.getFile() + (direction[0] * step);
+                int newRank = pos.getRank() + (direction[1] * step);
+
+                if (!moveWithinBounds(new Position(newFile, newRank))) {
                     break;
                 }
 
-                moves.add(new Position(newRank, newFile));
+                moves.add(new Position(newFile, newRank));
             }
         }
 

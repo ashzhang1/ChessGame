@@ -18,7 +18,7 @@ public abstract class Piece {
 
 
     protected boolean moveWithinBounds(Position pos) {
-        return pos.getRank() >= 0 && pos.getRank() <= 7 &&
-                pos.getFile() >= 0 && pos.getFile() <= 7;
+        return pos.getFile() >= 0 && pos.getFile() <= 7 &&
+                pos.getRank() >= 0 && pos.getRank() <= 7;
     }
 }

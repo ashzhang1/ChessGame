@@ -3,13 +3,13 @@ package com.chessgame.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Rook extends Piece{
+public class Rook extends Piece {
 
     private static final int[][] ROOK_DIRECTIONS = {
-            {1, 0}, // North
-            {0, 1}, // East
-            {-1, 0}, // South
-            {0, -1} // West
+            {0, 1},  // North
+            {1, 0},  // East
+            {0, -1}, // South
+            {-1, 0}  // West
     };
 
     public Rook(boolean isWhite) {
@@ -22,17 +22,16 @@ public class Rook extends Piece{
 
         for (int[] direction : ROOK_DIRECTIONS) {
             for (int step = 1; step <= 7; step++) {
-                int newRank = pos.getRank() + (direction[0] * step);
-                int newFile = pos.getFile() + (direction[1] * step);
+                int newFile = pos.getFile() + (direction[0] * step);
+                int newRank = pos.getRank() + (direction[1] * step);
 
-                if (!moveWithinBounds(new Position(newRank, newFile))) {
+                if (!moveWithinBounds(new Position(newFile, newRank))) {
                     break;
                 }
 
-                moves.add(new Position(newRank, newFile));
+                moves.add(new Position(newFile, newRank));
             }
         }
-
 
         return moves;
     }

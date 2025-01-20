@@ -6,10 +6,10 @@ import java.util.List;
 public class Knight extends Piece {
 
     private static final int[][] KNIGHT_MOVES = {
-            {2, 1}, {2, -1},    // Up 2, right/left 1
-            {-2, 1}, {-2, -1},  // Down 2, right/left 1
-            {1, 2}, {1, -2},    // Up 1, right/left 2
-            {-1, 2}, {-1, -2}   // Down 1, right/left 2
+        {1, 2}, {-1, 2},    // Right/left 1, up 2
+        {1, -2}, {-1, -2},  // Right/left 1, down 2
+        {2, 1}, {2, -1},    // Right 2, up/down 1
+        {-2, 1}, {-2, -1}   // Left 2, up/down 1
     };
 
     public Knight(boolean isWhite) {
@@ -21,14 +21,14 @@ public class Knight extends Piece {
         List<Position> moves = new ArrayList<Position>();
 
         for (int[] move: KNIGHT_MOVES) {
-            int newRank = pos.getRank() + move[0];
-            int newFile = pos.getFile() + move[1];
+            int newFile = pos.getFile() + move[0];
+            int newRank = pos.getRank() + move[1];
 
-            if (!moveWithinBounds(new Position(newRank, newFile))) {
-                break;
+            if (!moveWithinBounds(new Position(newFile, newRank))) {
+                continue; // Changed from break to continue
             }
 
-            moves.add(new Position(newRank, newFile));
+            moves.add(new Position(newFile, newRank));
         }
 
         return moves;
