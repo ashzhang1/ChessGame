@@ -29,7 +29,8 @@ public class King extends Piece{
             int newFile = pos.getFile() + move[0];
             int newRank = pos.getRank() + move[1];
 
-            if (!moveWithinBounds(new Position(newRank, newFile))) {
+            Position newPosition = new Position(newFile, newRank);
+            if (!newPosition.moveWithinBounds()) {
                 continue;
             }
 

@@ -24,8 +24,9 @@ public class Knight extends Piece {
             int newFile = pos.getFile() + move[0];
             int newRank = pos.getRank() + move[1];
 
-            if (!moveWithinBounds(new Position(newFile, newRank))) {
-                continue; // Changed from break to continue
+            Position newPosition = new Position(newFile, newRank);
+            if (!newPosition.moveWithinBounds()) {
+                continue;
             }
 
             moves.add(new Position(newFile, newRank));
