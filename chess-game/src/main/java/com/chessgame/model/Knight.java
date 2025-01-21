@@ -12,8 +12,8 @@ public class Knight extends Piece {
         {-2, 1}, {-2, -1}   // Left 2, up/down 1
     };
 
-    public Knight(boolean isWhite) {
-        super(isWhite, PieceValue.KNIGHT.getValue());
+    public Knight(String id, boolean isWhite) {
+        super(id, isWhite, PieceValue.KNIGHT.getValue());
     }
 
     @Override

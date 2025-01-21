@@ -5,8 +5,8 @@ import java.util.List;
 
 public class Pawn extends Piece{
 
-    public Pawn(boolean isWhite) {
-        super(isWhite, PieceValue.PAWN.getValue());
+    public Pawn(String id, boolean isWhite) {
+        super(id, isWhite, PieceValue.PAWN.getValue());
     }
 
     @Override

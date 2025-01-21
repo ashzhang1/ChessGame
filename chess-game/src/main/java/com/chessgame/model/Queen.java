@@ -10,8 +10,8 @@ public class Queen extends Piece {
     private final IMoveStrategy moveStrategy;
 
 
-    public Queen(boolean isWhite) {
-        super(isWhite, PieceValue.QUEEN.getValue());
+    public Queen(String id, boolean isWhite) {
+        super(id, isWhite, PieceValue.QUEEN.getValue());
         this.moveStrategy = CompositeMoveStrategy.getInstance();
     }
 

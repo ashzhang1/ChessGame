@@ -9,9 +9,9 @@ import java.util.List;
 
 public class Bishop extends Piece{
     private final IMoveStrategy moveStrategy;
-    public Bishop(boolean isWhite) {
+    public Bishop(String id, boolean isWhite) {
 
-        super(isWhite, PieceValue.BISHOP.getValue());
+        super(id, isWhite, PieceValue.BISHOP.getValue());
         this.moveStrategy = DiagonalMoveStrategy.getInstance();
     }
 

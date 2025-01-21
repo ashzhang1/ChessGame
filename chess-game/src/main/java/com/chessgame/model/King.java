@@ -16,8 +16,8 @@ public class King extends Piece{
             {-1, 1}   // North-West
     };
 
-    public King(boolean isWhite) {
-        super(isWhite, PieceValue.KING.getValue());
+    public King(String id, boolean isWhite) {
+        super(id, isWhite, PieceValue.KING.getValue());
     }
 
     @Override
