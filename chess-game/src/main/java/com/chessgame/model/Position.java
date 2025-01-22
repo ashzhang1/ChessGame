@@ -42,6 +42,14 @@ public class Position {
         return Math.abs(this.rank - pos.getRank()) == Math.abs(this.file - pos.getFile());
     }
 
+    public int getFileDistance(Position pos) {
+        return pos.getFile() - this.file;
+    }
+
+    public int getRankDistance(Position pos) {
+        return pos.getRank() - this.rank;
+    }
+
     public boolean moveWithinBounds() {
         return file >= 0 && file <= 7 && rank >= 0 && rank <= 7;
     }

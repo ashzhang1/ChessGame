@@ -1,5 +1,7 @@
 package com.chessgame.model;
 
+import com.chessgame.model.movement.NonSlidingPieceValidator;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +15,7 @@ public class Knight extends Piece {
     };
 
     public Knight(String id, boolean isWhite) {
-        super(id, isWhite, PieceValue.KNIGHT.getValue());
+        super(id, isWhite, PieceValue.KNIGHT.getValue(), new NonSlidingPieceValidator());
     }
 
     @Override

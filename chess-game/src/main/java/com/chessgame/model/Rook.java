@@ -2,6 +2,7 @@ package com.chessgame.model;
 
 import com.chessgame.model.movement.IMoveStrategy;
 import com.chessgame.model.movement.LinearMoveStrategy;
+import com.chessgame.model.movement.SlidingPieceValidator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +12,7 @@ public class Rook extends Piece {
 
 
     public Rook(String id, boolean isWhite) {
-        super(id, isWhite, PieceValue.ROOK.getValue());
+        super(id, isWhite, PieceValue.ROOK.getValue(), new SlidingPieceValidator());
         this.moveStrategy = LinearMoveStrategy.getInstance();
     }
 

@@ -1,5 +1,8 @@
 package com.chessgame.model;
 
+import com.chessgame.model.movement.IMoveStrategy;
+import com.chessgame.model.movement.MoveValidator;
+
 import java.util.List;
 
 public abstract class Piece {
@@ -8,11 +11,14 @@ public abstract class Piece {
     protected int value;
     protected boolean isCaptured;
 
-    public Piece(String id, boolean isWhite, int value) {
+    protected final MoveValidator moveValidator;
+
+    public Piece(String id, boolean isWhite, int value, MoveValidator moveValidator) {
         this.id = id;
         this.isWhite = isWhite;
         this.value = value;
         this.isCaptured = false;
+        this.moveValidator = moveValidator;
     }
 
     public abstract List<Position> getBasicMoves(Position pos);

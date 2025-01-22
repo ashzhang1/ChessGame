@@ -1,12 +1,15 @@
 package com.chessgame.model;
 
+import com.chessgame.model.movement.PawnValidator;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Pawn extends Piece{
 
     public Pawn(String id, boolean isWhite) {
-        super(id, isWhite, PieceValue.PAWN.getValue());
+        
+        super(id, isWhite, PieceValue.PAWN.getValue(), new PawnValidator());
     }
 
     @Override
