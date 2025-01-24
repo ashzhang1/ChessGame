@@ -21,7 +21,7 @@ public abstract class Piece {
         this.moveValidator = moveValidator;
     }
 
-    public abstract List<Position> getBasicMoves(Position pos);
+    public abstract List<Move> getBasicMoves(Position pos);
 
     @Override
     public int hashCode() {

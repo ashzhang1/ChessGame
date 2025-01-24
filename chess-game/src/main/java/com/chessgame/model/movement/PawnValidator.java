@@ -1,6 +1,7 @@
 package com.chessgame.model.movement;
 
 import com.chessgame.model.Board;
+import com.chessgame.model.Move;
 import com.chessgame.model.Position;
 
 import java.util.ArrayList;
@@ -9,35 +10,36 @@ import java.util.List;
 public class PawnValidator implements MoveValidator{
 
     @Override
-    public List<Position> filterValidMoves(List<Position> basicMoves, Position start, Board board) {
+    public List<Move> filterValidMoves(List<Move> basicMoves, Board board) {
 
-        List<Position> filteredMoves = new ArrayList<>();
+        List<Move> filteredMoves = new ArrayList<>();
 
-        for (Position endSquare : basicMoves) {
+        for (Move move : basicMoves) {
+            Position startSquare = move.getStartPosition();
+            Position endSquare = move.getEndPosition();
 
-
-            if (start.isOnSameFile(endSquare)) {
+            if (startSquare.isOnSameFile(endSquare)) {
                 //Two-squares forward move: BOTH squares must be empty
-                if (start.getRankDistance(endSquare) == 2) {
+                if (startSquare.getRankDistance(endSquare) == 2) {
                     // Get the square between start and end
-                    int intermediateRank = (start.getRank() + endSquare.getRank()) / 2;
-                    Position squareBetween = new Position(start.getFile(), intermediateRank);
+                    int intermediateRank = (startSquare.getRank() + endSquare.getRank()) / 2;
+                    Position squareBetween = new Position(startSquare.getFile(), intermediateRank);
 
                     // Check both squares are empty
                     if (!board.isSquareOccupied(squareBetween) && !board.isSquareOccupied(endSquare)) {
-                        filteredMoves.add(endSquare);
+                        filteredMoves.add(move);
                     }
                 }
                 else { //Forward moves: square MUST be empty
                     if (!board.isSquareOccupied(endSquare)) {
-                        filteredMoves.add(endSquare);
+                        filteredMoves.add(move);
                     }
                 }
             }
             else {
                 //Diagonal moves: MUST have enemy piece to be valid
-                if (board.canPieceCapture(start, endSquare)) {
-                    filteredMoves.add(endSquare);
+                if (board.canPieceCapture(startSquare, endSquare)) {
+                    filteredMoves.add(move);
                 }
             }
         }

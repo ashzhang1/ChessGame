@@ -4,6 +4,7 @@ import com.chessgame.model.movement.NonSlidingPieceValidator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class King extends Piece{
 
@@ -23,8 +24,8 @@ public class King extends Piece{
     }
 
     @Override
-    public List<Position> getBasicMoves(Position pos) {
-        List<Position> moves = new ArrayList<Position>();
+    public List<Move> getBasicMoves(Position pos) {
+        List<Move> moves = new ArrayList<>();
 
         for (int[] move : KING_MOVES) {
 
@@ -36,7 +37,8 @@ public class King extends Piece{
                 continue;
             }
 
-            moves.add(new Position(newRank, newFile));
+
+            moves.add(new Move(pos, newPosition, this, Optional.empty(), MoveType.NORMAL));
         }
 
 

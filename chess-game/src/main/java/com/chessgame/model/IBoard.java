@@ -9,6 +9,6 @@ public interface IBoard {
 
     public Piece getPieceAt(Position position);
 
-    public List<Position> getValidMoves(Piece piece, List<Position> moves);
+    public List<Move> getValidMoves(Piece piece, List<Move> moves);
 
 }

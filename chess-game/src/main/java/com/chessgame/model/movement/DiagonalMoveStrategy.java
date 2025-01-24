@@ -1,9 +1,13 @@
 package com.chessgame.model.movement;
 
+import com.chessgame.model.Move;
+import com.chessgame.model.MoveType;
+import com.chessgame.model.Piece;
 import com.chessgame.model.Position;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class DiagonalMoveStrategy implements IMoveStrategy{
 
@@ -24,8 +28,8 @@ public class DiagonalMoveStrategy implements IMoveStrategy{
     }
 
     @Override
-    public List<Position> getBasicMoves(Position pos) {
-        List<Position> moves = new ArrayList<Position>();
+    public List<Move> getBasicMoves(Position pos, Piece piece) {
+        List<Move> moves = new ArrayList<>();
 
         for (int[] direction : DIRECTIONS) {
             for (int step = 1; step <= 7; step++) {
@@ -38,7 +42,7 @@ public class DiagonalMoveStrategy implements IMoveStrategy{
                     break;
                 }
 
-                moves.add(newPosition);
+                moves.add(new Move(pos, newPosition, piece, Optional.empty(), MoveType.NORMAL));
             }
         }
 

@@ -17,7 +17,7 @@ public class Bishop extends Piece{
     }
 
     @Override
-    public List<Position> getBasicMoves(Position pos) {
-        return moveStrategy.getBasicMoves(pos);
+    public List<Move> getBasicMoves(Position pos) {
+        return moveStrategy.getBasicMoves(pos, this);
     }
 }

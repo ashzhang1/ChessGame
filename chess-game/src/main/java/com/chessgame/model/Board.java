@@ -60,14 +60,13 @@ public class Board implements IBoard{
         return fromPiece != null && toPiece != null && fromPiece.isWhite != toPiece.isWhite;
     }
 
-    public List<Position> getValidMoves(Piece piece, List<Position> moves) {
+    public List<Move> getValidMoves(Piece piece, List<Move> moves) {
 
-        List<Position> validMoves = new ArrayList<>();
+        List<Move> validMoves = new ArrayList<>();
         Optional<Position> startPos = this.getPiecePosition(piece);
         if (startPos.isPresent()) {
             validMoves = piece.moveValidator.filterValidMoves(
                     moves,
-                    startPos.get(),
                     this
             );
         }
@@ -78,6 +77,18 @@ public class Board implements IBoard{
 
 
         return null;
+    }
+
+    public void makeMove(Move move) {
+
+    }
+
+    public void undoLastMove() {
+
+    }
+
+    public boolean isKingInCheck() {
+        return true;
     }
 
 }

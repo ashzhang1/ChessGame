@@ -1,5 +1,7 @@
 package com.chessgame.model.movement;
 
+import com.chessgame.model.Move;
+import com.chessgame.model.Piece;
 import com.chessgame.model.Position;
 
 import java.util.ArrayList;
@@ -21,12 +23,12 @@ public class CompositeMoveStrategy implements IMoveStrategy {
     }
 
     @Override
-    public List<Position> getBasicMoves(Position pos) {
-        List<Position> moves = new ArrayList<>();
+    public List<Move> getBasicMoves(Position pos, Piece piece) {
+        List<Move> moves = new ArrayList<>();
 
         // Combine moves from all strategies
         for (IMoveStrategy strategy : strategies) {
-            moves.addAll(strategy.getBasicMoves(pos));
+            moves.addAll(strategy.getBasicMoves(pos, piece));
         }
 
         return moves;
