@@ -32,4 +32,28 @@ public class SlidingPieceValidator implements MoveValidator{
         }
         return filteredMoves;
     }
+
+    @Override
+    public boolean canCapturePosition(Move move, Board board) {
+        Position startPos = move.getStartPosition();
+        Position endPos = move.getEndPosition();
+
+        // First check if the move is valid for this piece type
+        List<Move> basicMoves = move.getMovedPiece().getBasicMoves(startPos);
+        boolean isValidDirection = false;
+        for (Move basicMove : basicMoves) {
+            if (basicMove.getEndPosition().getFile() == endPos.getFile() &&
+                    basicMove.getEndPosition().getRank() == endPos.getRank()) {
+                isValidDirection = true;
+                break;
+            }
+        }
+
+        if (!isValidDirection) return false;
+
+        // Then check if path is clear
+        return board.isPathClear(startPos, endPos);
+    }
+
+
 }

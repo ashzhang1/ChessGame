@@ -62,33 +62,110 @@ public class Board implements IBoard{
 
     public List<Move> getValidMoves(Piece piece, List<Move> moves) {
 
-        List<Move> validMoves = new ArrayList<>();
-        Optional<Position> startPos = this.getPiecePosition(piece);
-        if (startPos.isPresent()) {
-            validMoves = piece.moveValidator.filterValidMoves(
-                    moves,
-                    this
-            );
-        }
+        List<Move> validMoves = piece.moveValidator.filterValidMoves(moves, this);
 
         // Filter out moves that leave king in check
+        List<Move> finalValidMoves = new ArrayList<>();
 
 
-
-
-        return null;
+        // We first simulate the move, then check if King is in check then undo the move.
+        // Only add the move if it doesn't result in the king being in check
+        for (Move move : validMoves) {
+            makeMove(move);
+            if (!isKingInCheck(move.getMovedPiece().isWhite)) {
+                finalValidMoves.add(move);
+            }
+            undoMove(move);
+        }
+        return finalValidMoves;
     }
 
     public void makeMove(Move move) {
 
+        // Get the movement positions
+        Position startPos = move.getStartPosition();
+        Position endPos = move.getEndPosition();
+
+        // Get moving piece
+        Piece movingPiece = this.getPieceAt(startPos);
+
+        // Check if destination has piece (potential capture)
+        Piece pieceAtDestination = this.getPieceAt(endPos);
+        if (pieceAtDestination != null) {
+            move.setMoveType(MoveType.CAPTURE);
+            pieceAtDestination.setCaptured(true);
+            move.setCapturedPiece(Optional.of(pieceAtDestination));
+        }
+
+        // Update board
+        board[startPos.getRank()][startPos.getFile()] = null;  // Clear start position
+        board[endPos.getRank()][endPos.getFile()] = movingPiece;  // Place piece in new position
     }
 
-    public void undoLastMove() {
+    public void undoMove(Move move) {
 
+        // Get the movement positions
+        Position startPos = move.getStartPosition();
+        Position endPos = move.getEndPosition();
+
+        // Get this piece to move back to og position
+        Piece movedPiece = this.getPieceAt(endPos);
+
+        // Move piece back to start
+        board[startPos.getRank()][startPos.getFile()] = movedPiece;
+
+        // If there was a capture, restore the captured piece
+        if (move.getMoveType() == MoveType.CAPTURE) {
+            Piece capturedPiece = move.getCapturedPiece().get();
+
+            capturedPiece.setCaptured(false);  // Put the captured piece back into game
+            board[endPos.getRank()][endPos.getFile()] = capturedPiece;
+        } else {
+            board[endPos.getRank()][endPos.getFile()] = null; // This wasn't a capture move
+        }
     }
 
-    public boolean isKingInCheck() {
-        return true;
+    public boolean isKingInCheck(boolean isWhiteKing) {
+
+        // First we need to find the correct king
+        Position kingPos = null;
+        for (int rank = 0; rank < BOARD_SIZE; rank++) {
+            for (int file = 0; file < BOARD_SIZE; file++) {
+                Piece piece = board[rank][file];
+                if (piece instanceof King && piece.isWhite == isWhiteKing) {
+                    kingPos = new Position(rank, file);
+                    break; // King is found
+                }
+            }
+            if (kingPos != null) break; // Break outer loop too
+        }
+
+        // Then check if any enemy piece can capture king
+        for (int rank = 0; rank < BOARD_SIZE; rank++) {
+            for (int file = 0; file < BOARD_SIZE; file++) {
+                Piece piece = board[rank][file];
+
+                // Skip empty squares, same color pieces, and the king itself
+                if (piece == null || piece.isWhite == isWhiteKing) {
+                    continue;
+                }
+
+                Position piecePos = new Position(file, rank);
+                Move kingCaptureMove = new Move(
+                        piecePos,
+                        kingPos,
+                        piece,
+                        Optional.of(getPieceAt(kingPos)), // The king is the captured piece
+                        MoveType.CAPTURE
+                );
+
+                if (piece.moveValidator.canCapturePosition(kingCaptureMove, this)) {
+                    return true; // King is in check
+                }
+            }
+        }
+        return false; // No piece can attack the king
+
     }
 
 }

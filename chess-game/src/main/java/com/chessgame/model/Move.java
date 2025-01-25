@@ -26,4 +26,26 @@ public class Move {
     public Position getEndPosition() {
         return endPosition;
     }
+
+    public MoveType getMoveType() {
+        return moveType;
+    }
+
+    public Optional<Piece> getCapturedPiece() {
+        return capturedPiece;
+    }
+
+    public Piece getMovedPiece() {
+        return movedPiece;
+    }
+
+
+    //setters
+    public void setCapturedPiece(Optional<Piece> piece) {
+        capturedPiece = piece;
+    }
+
+    public void setMoveType(MoveType type) {
+        moveType = type;
+    }
 }

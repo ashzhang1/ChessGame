@@ -21,6 +21,14 @@ public abstract class Piece {
         this.moveValidator = moveValidator;
     }
 
+    public void setCaptured(boolean isCaptured) {
+        this.isCaptured = isCaptured;
+    }
+
+    public boolean getIsWhite() {
+        return isWhite;
+    }
+
     public abstract List<Move> getBasicMoves(Position pos);
 
     @Override

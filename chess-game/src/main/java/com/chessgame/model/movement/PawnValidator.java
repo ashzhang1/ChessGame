@@ -2,6 +2,7 @@ package com.chessgame.model.movement;
 
 import com.chessgame.model.Board;
 import com.chessgame.model.Move;
+import com.chessgame.model.Piece;
 import com.chessgame.model.Position;
 
 import java.util.ArrayList;
@@ -45,5 +46,39 @@ public class PawnValidator implements MoveValidator{
         }
 
         return filteredMoves;
+    }
+
+    @Override
+    public boolean canCapturePosition(Move move, Board board) {
+        Position startPos = move.getStartPosition();
+        Position endPos = move.getEndPosition();
+        Piece pawn = move.getMovedPiece();
+
+        // Check if it's a diagonal move
+        if (!startPos.isOnSameDiagonal(endPos)) {
+            return false;
+        }
+
+        // Check if it's one square diagonally
+        int rankDistance = Math.abs(startPos.getRankDistance(endPos));
+        int fileDistance = Math.abs(startPos.getFileDistance(endPos));
+        if (rankDistance != 1 || fileDistance != 1) {
+            return false;
+        }
+
+        // Check if pawn is moving in correct direction
+        int rankDirection = endPos.getRank() - startPos.getRank();
+
+        // White pawns move up (positive rank)
+        if (pawn.getIsWhite() && rankDirection < 0) {
+            return false;
+        }
+
+        // Black pawns move down (negative rank)
+        if (!pawn.getIsWhite() && rankDirection > 0) {
+            return false;
+        }
+
+        return true;
     }
 }

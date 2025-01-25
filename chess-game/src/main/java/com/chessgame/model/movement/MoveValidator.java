@@ -9,4 +9,6 @@ import java.util.List;
 public interface MoveValidator {
 
     List<Move> filterValidMoves(List<Move> basicMoves, Board board);
+
+    boolean canCapturePosition(Move move, Board board);
 }
