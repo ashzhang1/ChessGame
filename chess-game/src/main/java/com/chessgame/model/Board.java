@@ -168,4 +168,12 @@ public class Board implements IBoard{
 
     }
 
+    public boolean isCheckMate() {
+        return false;
+    }
+
+    public boolean isStaleMate() {
+        return false;
+    }
+
 }
