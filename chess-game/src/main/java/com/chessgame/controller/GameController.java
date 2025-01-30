@@ -1,7 +1,10 @@
-package com.chessgame.model;
+package com.chessgame.controller;
+
+import com.chessgame.model.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class GameController {
     private boolean isWhiteTurn;
@@ -18,6 +21,10 @@ public class GameController {
         this.whitePlayer = new Player(true);
         this.blackPlayer = new Player(false);
         this.currState = GameState.IN_PROGRESS;
+    }
+
+    public Board getBoard() {
+        return gameBoard;
     }
 
     public void startNewGame() {
@@ -47,7 +54,7 @@ public class GameController {
 
         Move lastMove = moveHistory.get(moveHistory.size() - 1);
         Piece lastMovedPiece = lastMove.getMovedPiece();
-        return lastMovedPiece.isWhite ? whitePlayer : blackPlayer;
+        return lastMovedPiece.getIsWhite() ? whitePlayer : blackPlayer;
 
     }
 
@@ -56,13 +63,26 @@ public class GameController {
     }
 
     public void processMove(Position from, Position to) {
-
+        Piece piece = gameBoard.getPieceAt(from);
+        Move move = new Move(from, to, piece, Optional.empty(), MoveType.NORMAL);
+        gameBoard.makeMove(move);
+        moveHistory.add(move);
+        switchTurn();
     }
 
 
     public void undoLastMove() {
         Move lastMove = moveHistory.get(moveHistory.size() - 1);
         gameBoard.undoMove(lastMove);
+    }
+
+
+    public List<Move> getValidMovesForPiece(Position position) {
+        Piece piece = gameBoard.getPieceAt(position);
+        if (piece == null || piece.getIsWhite() != isWhiteTurn) {
+            return new ArrayList<>();
+        }
+        return gameBoard.getValidMoves(piece, piece.getBasicMoves(position));
     }
 
 

@@ -6,6 +6,12 @@ public class Position {
 
     // Constructor
     public Position(int file, int rank) {
+        if (!isValidCoordinate(file) || !isValidCoordinate(rank)) {
+            throw new IllegalArgumentException(
+                    String.format("Invalid position coordinates: file=%d, rank=%d", file, rank)
+            );
+        }
+
         this.file = file;
         this.rank = rank;
     }
@@ -17,6 +23,10 @@ public class Position {
 
     public int getRank() {
         return rank;
+    }
+
+    private boolean isValidCoordinate(int coordinate) {
+        return coordinate >= 0 && coordinate < 8;
     }
 
     public boolean isOnSameFile(Position pos) {
@@ -52,5 +62,15 @@ public class Position {
 
     public boolean moveWithinBounds() {
         return file >= 0 && file <= 7 && rank >= 0 && rank <= 7;
+    }
+
+
+    /**
+     * Returns array indices for accessing the board array
+     * NOTE: This is different from file/rank as arrays are accessed [rank][file]
+     * A bit confusing...
+     */
+    public int[] getBoardIndices() {
+        return new int[]{rank, file};
     }
 }

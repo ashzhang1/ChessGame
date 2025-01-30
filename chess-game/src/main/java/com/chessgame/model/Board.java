@@ -27,10 +27,8 @@ public class Board implements IBoard{
     }
 
     public Piece getPieceAt(Position position) {
-        int file = position.getFile();
-        int rank = position.getRank();
-
-        return board[rank][file];
+        int[] indices = position.getBoardIndices();
+        return board[indices[0]][indices[1]];
     }
 
     public boolean isPathClear(Position start, Position end) {
@@ -48,7 +46,12 @@ public class Board implements IBoard{
     }
 
     public boolean isSquareOccupied(Position position) {
-        return board[position.getRank()][position.getFile()] != null;
+        return getPieceAt(position) != null;
+    }
+
+    public void setPieceAt(Position position, Piece piece) {
+        int[] indices = position.getBoardIndices();
+        board[indices[0]][indices[1]] = piece;
     }
 
     public boolean canPieceCapture(Position from, Position to) {
@@ -98,8 +101,8 @@ public class Board implements IBoard{
         }
 
         // Update board
-        board[startPos.getRank()][startPos.getFile()] = null;  // Clear start position
-        board[endPos.getRank()][endPos.getFile()] = movingPiece;  // Place piece in new position
+        setPieceAt(startPos, null);  // Clear start position
+        setPieceAt(endPos, movingPiece);  // Place piece in new position
     }
 
     public void undoMove(Move move) {
@@ -119,9 +122,9 @@ public class Board implements IBoard{
             Piece capturedPiece = move.getCapturedPiece().get();
 
             capturedPiece.setCaptured(false);  // Put the captured piece back into game
-            board[endPos.getRank()][endPos.getFile()] = capturedPiece;
+            setPieceAt(endPos, capturedPiece);
         } else {
-            board[endPos.getRank()][endPos.getFile()] = null; // This wasn't a capture move
+            setPieceAt(endPos, null); // This wasn't a capture move
         }
     }
 
