@@ -13,13 +13,19 @@ public class PawnValidator implements MoveValidator{
     @Override
     public List<Move> filterValidMoves(List<Move> basicMoves, Board board) {
 
+        System.out.println("PawnValidator: Filtering " + basicMoves.size() + " moves");
+
         List<Move> filteredMoves = new ArrayList<>();
 
         for (Move move : basicMoves) {
             Position startSquare = move.getStartPosition();
             Position endSquare = move.getEndPosition();
 
+            System.out.println("Checking move from " + startSquare.getFile() + "," + startSquare.getRank()
+                    + " to " + endSquare.getFile() + "," + endSquare.getRank());
+
             if (startSquare.isOnSameFile(endSquare)) {
+                System.out.println("Forward move");
                 //Two-squares forward move: BOTH squares must be empty
                 if (startSquare.getRankDistance(endSquare) == 2) {
                     // Get the square between start and end
@@ -38,13 +44,14 @@ public class PawnValidator implements MoveValidator{
                 }
             }
             else {
+                System.out.println("Diagonal move - checking for capture");
                 //Diagonal moves: MUST have enemy piece to be valid
                 if (board.canPieceCapture(startSquare, endSquare)) {
                     filteredMoves.add(move);
                 }
             }
         }
-
+        System.out.println("PawnValidator: Returning " + filteredMoves.size() + " valid moves");
         return filteredMoves;
     }
 

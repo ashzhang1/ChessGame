@@ -64,6 +64,15 @@ public class Position {
         return file >= 0 && file <= 7 && rank >= 0 && rank <= 7;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof Position) {
+            return ((Position) o).getFile() == this.file
+                    && ((Position) o).getRank() == this.rank;
+        }
+        return false;
+    }
+
 
     /**
      * Returns array indices for accessing the board array

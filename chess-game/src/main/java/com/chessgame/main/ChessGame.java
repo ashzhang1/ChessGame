@@ -12,7 +12,8 @@ public class ChessGame {
 
     public ChessGame() {
         this.gameController = new GameController();
-        this.gameView = new GameView();
+        this.gameView = new GameView(this.gameController);
+        this.gameController.registerObserver(gameView.getChessBoardView());
     }
 
     public static void main(String[] args) {

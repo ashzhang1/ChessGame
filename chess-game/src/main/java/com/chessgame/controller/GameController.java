@@ -1,6 +1,7 @@
 package com.chessgame.controller;
 
 import com.chessgame.model.*;
+import com.chessgame.observer.BoardViewObserver;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,9 @@ public class GameController {
     private Player whitePlayer;
     private Player blackPlayer;
     private GameState currState;
+    private SelectedPieceState selectedPieceState;
+
+    private BoardViewObserver observer;
 
     public GameController() {
         this.isWhiteTurn = true;
@@ -21,6 +25,11 @@ public class GameController {
         this.whitePlayer = new Player(true);
         this.blackPlayer = new Player(false);
         this.currState = GameState.IN_PROGRESS;
+        this.selectedPieceState = new SelectedPieceState();
+    }
+
+    public void registerObserver(BoardViewObserver observer) {
+        this.observer = observer;
     }
 
     public Board getBoard() {
@@ -79,10 +88,72 @@ public class GameController {
 
     public List<Move> getValidMovesForPiece(Position position) {
         Piece piece = gameBoard.getPieceAt(position);
+        System.out.println("Getting moves for piece: " + piece);
+
         if (piece == null || piece.getIsWhite() != isWhiteTurn) {
+            System.out.println("Invalid piece or wrong turn");
             return new ArrayList<>();
         }
-        return gameBoard.getValidMoves(piece, piece.getBasicMoves(position));
+
+        List<Move> basicMoves = piece.getBasicMoves(position);
+        System.out.println("Basic moves: " + basicMoves.size());
+
+        List<Move> validMoves = gameBoard.getValidMoves(piece, basicMoves);
+        System.out.println("Valid moves after filtering: " + validMoves.size());
+
+        return validMoves;
+    }
+
+    public void handleSquareClick(Position clickedPosition) {
+        System.out.println("GameController handling click at: " + clickedPosition.getFile() + "," + clickedPosition.getRank());
+
+        // No piece is currently selected
+        if (!selectedPieceState.hasSelectedPiece()) {
+
+            // Get piece at clicked position
+            Piece clickedPiece = gameBoard.getPieceAt(clickedPosition);
+            System.out.println("Clicked piece: " + clickedPiece);
+
+            // Check if it's a valid piece --> piece must be own player's piece
+            if (clickedPiece != null && clickedPiece.getIsWhite() == isWhiteTurn) {
+
+                // Get valid moves for this piece
+                List<Move> validMoves = getValidMovesForPiece(clickedPosition);
+
+                // Update selection state
+                selectedPieceState.updateSelection(clickedPiece, clickedPosition, validMoves);
+
+                // Tell view to highlight valid squares
+                // TODO: We'll need to add this method to ChessBoardView
+                List<Position> endPositions = new ArrayList<>();
+                for (Move move: validMoves) {
+                    endPositions.add(move.getEndPosition());
+                }
+                observer.onSquareSelected(clickedPosition, endPositions);
+            }
+        }
+
+        // If a piece is already selected, then player is clicking on desired move square
+        else {
+
+            if (selectedPieceState.hasSelectedPiece()) {
+
+                // Process move if the clicked position is valid move square
+                if (selectedPieceState.isSquareValid(clickedPosition)) {
+                    processMove(selectedPieceState.getSelectedPosition().get(), clickedPosition);
+                }
+
+                // Invalid move, clear selection
+                selectedPieceState.clearSelection();
+
+
+                // Tell view to clear highlights
+                // TODO: We'll need to add this method to ChessBoardView
+                observer.onSelectionCleared();
+
+            }
+
+        }
     }
 
 

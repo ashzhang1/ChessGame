@@ -32,12 +32,11 @@ public class King extends Piece{
             int newFile = pos.getFile() + move[0];
             int newRank = pos.getRank() + move[1];
 
-            Position newPosition = new Position(newFile, newRank);
-            if (!newPosition.moveWithinBounds()) {
-                continue;
+            if (newFile < 0 || newFile >= 8 || newRank < 0 || newRank >= 8) {
+                break;  // Stop this direction if we're out of bounds
             }
 
-
+            Position newPosition = new Position(newFile, newRank);
             moves.add(new Move(pos, newPosition, this, Optional.empty(), MoveType.NORMAL));
         }
 

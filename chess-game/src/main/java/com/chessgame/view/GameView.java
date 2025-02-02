@@ -1,23 +1,27 @@
 package com.chessgame.view;
 
+import com.chessgame.controller.GameController;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class GameView extends JFrame {
-    private static final int FRAME_WIDTH = 1200;
-    private static final int FRAME_HEIGHT = 750;
-    private static final int BOARD_SIZE = 750;
+    private static final int FRAME_WIDTH = 1000;
+    private static final int FRAME_HEIGHT = 600;
+    private static final int BOARD_SIZE = 600;
 
     private ChessBoardView chessBoardView;
+    private GameController gameController;
 
-    public GameView() {
+    public GameView(GameController controller) {
+        this.gameController = controller;
         setTitle("Chess Game");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
         setResizable(false);
 
         // Initialize the chess board
-        chessBoardView = new ChessBoardView();
+        chessBoardView = new ChessBoardView(controller);
 
         // Chess Board container
         JPanel boardContainer = new JPanel();

@@ -33,15 +33,15 @@ public class LinearMoveStrategy implements IMoveStrategy {
                 int newFile = pos.getFile() + (direction[0] * step);
                 int newRank = pos.getRank() + (direction[1] * step);
 
-                Position newPosition = new Position(newFile, newRank);
-                if (!newPosition.moveWithinBounds()) {
-                    break;
+                // Check bounds BEFORE creating Position
+                if (newFile < 0 || newFile >= 8 || newRank < 0 || newRank >= 8) {
+                    break;  // Stop this direction if we're out of bounds
                 }
 
+                Position newPosition = new Position(newFile, newRank);
                 moves.add(new Move(pos, newPosition, piece, Optional.empty(), MoveType.NORMAL));
             }
         }
-
         return moves;
     }
 }
