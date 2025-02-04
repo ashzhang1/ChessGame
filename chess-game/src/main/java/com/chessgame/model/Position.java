@@ -73,13 +73,4 @@ public class Position {
         return false;
     }
 
-
-    /**
-     * Returns array indices for accessing the board array
-     * NOTE: This is different from file/rank as arrays are accessed [rank][file]
-     * A bit confusing...
-     */
-    public int[] getBoardIndices() {
-        return new int[]{rank, file};
-    }
 }

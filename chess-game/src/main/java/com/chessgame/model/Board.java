@@ -13,7 +13,7 @@ public class Board implements IBoard{
         this.board = factory.createInitialBoard();
     }
 
-
+    // Finds the board position given a piece
     public Optional<Position> getPiecePosition(Piece piece) {
         for (int rank = 0; rank < BOARD_SIZE; rank++) {
             for (int file = 0; file < BOARD_SIZE; file++) {
@@ -26,21 +26,30 @@ public class Board implements IBoard{
         return Optional.empty();
     }
 
+    // Finds a piece given a position
     public Piece getPieceAt(Position position) {
-        int[] indices = position.getBoardIndices();
-        return board[indices[0]][indices[1]];
+        return board[position.getRank()][position.getFile()];
     }
 
     public boolean isPathClear(Position start, Position end) {
 
+        /*
+        * Integer.compare(a, b)
+        * -1 if a < b
+        *  0 if a == b
+        *  1 if a > b
+        * */
         int fileDirection = Integer.compare(end.getFile(), start.getFile());
         int rankDirection = Integer.compare(end.getRank(), start.getRank());
 
         Position curPos = start;
-        while (curPos.getFile() != end.getFile() || curPos.getRank() != end.getRank()) {
-            curPos = new Position(curPos.getFile() + fileDirection, curPos.getRank() + rankDirection);
+        Position nextPos = new Position(curPos.getFile() + fileDirection, curPos.getRank() + rankDirection);
 
-            if (this.isSquareOccupied(curPos)) return false;
+        // Check all squares up to (but not including) end square
+        while (nextPos.getFile() != end.getFile() || nextPos.getRank() != end.getRank()) {
+            if (this.isSquareOccupied(nextPos)) return false;
+            curPos = nextPos;
+            nextPos = new Position(curPos.getFile() + fileDirection, curPos.getRank() + rankDirection);
         }
         return true;
     }
@@ -50,8 +59,7 @@ public class Board implements IBoard{
     }
 
     public void setPieceAt(Position position, Piece piece) {
-        int[] indices = position.getBoardIndices();
-        board[indices[0]][indices[1]] = piece;
+        board[position.getRank()][position.getFile()] = piece;
     }
 
     public boolean canPieceCapture(Position from, Position to) {
@@ -65,10 +73,10 @@ public class Board implements IBoard{
 
     public List<Move> getValidMoves(Piece piece, List<Move> moves) {
 
-        System.out.println("Starting with moves: " + moves.size());
+//        System.out.println("Starting with moves: " + moves.size());
 
         List<Move> validMoves = piece.moveValidator.filterValidMoves(moves, this);
-        System.out.println("After move validator: " + validMoves.size());
+//        System.out.println("After move validator: " + validMoves.size());
 
         // Filter out moves that leave king in check
         List<Move> finalValidMoves = new ArrayList<>();
@@ -81,7 +89,7 @@ public class Board implements IBoard{
             undoMove(move);
         }
 
-        System.out.println("After king check filter: " + finalValidMoves.size());
+//        System.out.println("After king check filter: " + finalValidMoves.size());
         return finalValidMoves;
     }
 

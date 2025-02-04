@@ -1,7 +1,6 @@
 package com.chessgame.main;
 
 import com.chessgame.controller.GameController;
-import com.chessgame.view.ChessBoardView;
 import com.chessgame.view.GameView;
 
 import javax.swing.*;
@@ -22,7 +21,7 @@ public class ChessGame {
             game.gameView.setVisible(true);
             game.gameController.startNewGame();
 
-            // Update board view with initial piece positions
+            // Set up board view with initial piece positions
             game.gameView.getChessBoardView().updateBoard(game.gameController.getBoard());
         });
     }

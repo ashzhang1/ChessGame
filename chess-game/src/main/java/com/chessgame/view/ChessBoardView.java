@@ -2,6 +2,7 @@ package com.chessgame.view;
 
 import com.chessgame.controller.GameController;
 import com.chessgame.model.Board;
+import com.chessgame.model.Move;
 import com.chessgame.model.Piece;
 import com.chessgame.model.Position;
 import com.chessgame.observer.BoardViewObserver;
@@ -9,12 +10,9 @@ import com.chessgame.util.ChessConstants;
 import com.chessgame.util.PieceImageLoader;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,7 +35,7 @@ public class ChessBoardView extends JPanel implements BoardViewObserver {
     private final Color lightSquareColor;
     private final Color darkSquareColor;
     private final Color highlightedSquareColor;
-    private GameController gameController;  // Add this field
+    private GameController gameController;
 
 
     public ChessBoardView(GameController controller) {
@@ -50,6 +48,8 @@ public class ChessBoardView extends JPanel implements BoardViewObserver {
     }
 
     private void setupBoard() {
+
+        // Creating 8x8 grid
         setLayout(new GridLayout(ChessConstants.BOARD_SIZE, ChessConstants.BOARD_SIZE));
 
         // Adding all 64 squares to the grid
@@ -62,7 +62,8 @@ public class ChessBoardView extends JPanel implements BoardViewObserver {
     }
 
     private void handleSquareClick(Position position) {
-        gameController.handleSquareClick(position);  // We'll create this method next
+        // Notify the game controller that a square has been clicked on.
+        gameController.handleSquareClick(position);
     }
 
     public void updateBoard(Board board) {
@@ -73,8 +74,12 @@ public class ChessBoardView extends JPanel implements BoardViewObserver {
                 Piece piece = board.getPieceAt(pos);
 
                 if (piece == null) {
+                    // No piece at this position --> clear the square
                     squares[displayRank][file].clearPiece();
-                } else {
+                }
+
+                // Add the piece image
+                else {
                     String color = piece.getIsWhite() ? "w" : "b";
                     String pieceCode = PIECE_CODES.get(piece.getClass().getSimpleName().toLowerCase());
                     squares[displayRank][file].addPieceImage(color, pieceCode);
@@ -86,16 +91,12 @@ public class ChessBoardView extends JPanel implements BoardViewObserver {
     @Override
     public void onSquareSelected(Position position, List<Position> validMoves) {
 
-        System.out.println("ChessBoardView: Highlighting squares for position: " + position.getFile() + "," + position.getRank());
-        System.out.println("Number of valid moves: " + validMoves.size());
-
-
         // First clear any existing highlights
         onSelectionCleared();
 
         // Then highlight valid moves
         for (Position movePos : validMoves) {
-            int displayRow = 7 - movePos.getRank();
+            int displayRow = ChessConstants.BOARD_SIZE - 1 - movePos.getRank();
             // Add bounds checking
             if (displayRow >= 0 && displayRow < 8 && movePos.getFile() >= 0 && movePos.getFile() < 8) {
                 squares[displayRow][movePos.getFile()].highlightSquare();
@@ -105,7 +106,6 @@ public class ChessBoardView extends JPanel implements BoardViewObserver {
 
     @Override
     public void onSelectionCleared() {
-        System.out.println("ChessBoardView: Clearing highlights");
 
         for (int row = 0; row < ChessConstants.BOARD_SIZE; row++) {
             for (int col = 0; col < ChessConstants.BOARD_SIZE; col++) {
@@ -114,6 +114,29 @@ public class ChessBoardView extends JPanel implements BoardViewObserver {
                 }
             }
         }
+    }
+
+    @Override
+    public void onPieceMoved(Move move) {
+
+        Piece movedPiece = move.getMovedPiece();
+        Position startPos = move.getStartPosition();
+        Position endPos = move.getEndPosition();
+
+        // Clear the piece from the starting position
+        int startDisplayRank = ChessConstants.BOARD_SIZE - 1 - startPos.getRank();
+        squares[startDisplayRank][startPos.getFile()].clearPiece();
+
+        // Clear the highlighting
+        onSelectionCleared();
+
+        // Then we add the piece image back into end position
+        int endDisplayRank = ChessConstants.BOARD_SIZE - 1 - endPos.getRank();
+        String color = movedPiece.getIsWhite() ? "w" : "b";
+        String pieceCode = PIECE_CODES.get(movedPiece.getClass().getSimpleName().toLowerCase());
+        squares[endDisplayRank][endPos.getFile()].addPieceImage(color, pieceCode);
+
+
     }
 
 
@@ -142,23 +165,26 @@ public class ChessBoardView extends JPanel implements BoardViewObserver {
             setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
             setBackground(isLightSquare() ? lightSquareColor : darkSquareColor);
             setLayout(null);
+
+            setFocusable(true);
+            setEnabled(true);
         }
 
         private void setupMouseListener() {
             addMouseListener(new MouseAdapter() {
                 @Override
-                public void mouseClicked(MouseEvent e) {
-                    int gameRow = 7 - row;
+                public void mousePressed(MouseEvent e) {
+                    System.out.println("MOUSE PRESS RECEIVED at square " + getChessNotation());
+                    int gameRow = ChessConstants.BOARD_SIZE - 1 - row;
                     Position clickedPosition = new Position(col, gameRow);
-                    handleSquareClick(clickedPosition); // Tell ChessBoardView about the click
+                    handleSquareClick(clickedPosition);
                 }
             });
         }
 
         private void handleSquareClick(Position position) {
-            System.out.println("Square clicked at position: " + position.getFile() + "," + position.getRank());
-            // We need to add this method to ChessBoardView
-            ChessBoardView.this.handleSquareClick(position);
+            System.out.println("CHESS BOARD VIEW received click at: " + position.getFile() + "," + position.getRank());
+            gameController.handleSquareClick(position);
         }
 
         private boolean isLightSquare() {

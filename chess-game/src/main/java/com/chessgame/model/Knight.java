@@ -28,7 +28,7 @@ public class Knight extends Piece {
             int newRank = pos.getRank() + move[1];
 
             if (newFile < 0 || newFile >= 8 || newRank < 0 || newRank >= 8) {
-                break;  // Stop this direction if we're out of bounds
+                continue;  // Stop
             }
 
             Position newPosition = new Position(newFile, newRank);
