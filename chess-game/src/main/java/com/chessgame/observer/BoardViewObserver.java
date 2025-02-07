@@ -1,5 +1,6 @@
 package com.chessgame.observer;
 
+import com.chessgame.model.Board;
 import com.chessgame.model.Move;
 import com.chessgame.model.Position;
 
@@ -10,4 +11,8 @@ public interface BoardViewObserver {
     void onSelectionCleared();
 
     void onPieceMoved(Move move);
+
+    void disableBoard();
+
+    void onGameReset(Board board);
 }

@@ -44,13 +44,12 @@ public class GameController {
         this.gameBoard = new Board(new PieceFactory());
         this.whitePlayer.reset();
         this.blackPlayer.reset();
+        this.currState = GameState.IN_PROGRESS;
+        observer.onGameReset(gameBoard);
     }
 
     public boolean isGameOver() {
-        if (currState == GameState.CHECKMATE || currState == GameState.STALEMATE) {
-            return true;
-        }
-        return false;
+        return (currState == GameState.CHECKMATE || currState == GameState.STALEMATE);
     }
 
     public Player getCurrentPlayer() {
@@ -72,12 +71,49 @@ public class GameController {
     }
 
     public void processMove(Position from, Position to) {
+        executeMoveLogic(from, to);
+        updateGameState();
+    }
+
+    public void executeMoveLogic(Position from, Position to) {
         Piece piece = gameBoard.getPieceAt(from);
         Move move = new Move(from, to, piece, Optional.empty(), MoveType.NORMAL);
+
         gameBoard.makeMove(move);
         observer.onPieceMoved(move);
         moveHistory.add(move);
-        switchTurn();
+    }
+
+    public void updateGameState() {
+
+        // Check if the opposition is in check and has any valid moves
+        boolean isInCheck = gameBoard.isKingInCheck(!isWhiteTurn);
+        boolean hasValidMoves = gameBoard.hasValidMoves(!isWhiteTurn);
+
+        if (isInCheck) {
+            if (!hasValidMoves) {
+                currState = GameState.CHECKMATE;
+                Player winner = getWinner();
+                System.out.println("CHECKMATE");
+                // Update game status on the UI
+                // Show winner on the UI
+                // Disable the board
+                observer.disableBoard();
+            }
+            else {
+                currState = GameState.CHECK;
+                // Update game status on the UI
+                switchTurn();
+            }
+        }
+        else if (!hasValidMoves) {
+            currState = GameState.STALEMATE;
+            // Update game status on the UI
+            // Disable the board
+        } else {
+            currState = GameState.IN_PROGRESS;
+            switchTurn();
+        }
     }
 
     public void undoLastMove() {
@@ -98,9 +134,7 @@ public class GameController {
         List<Move> basicMoves = piece.getBasicMoves(position);
 
         // Then filter out the invalid moves
-        List<Move> validMoves = gameBoard.getValidMoves(piece, basicMoves);
-
-        return validMoves;
+        return gameBoard.getValidMoves(piece, basicMoves);
     }
 
     public void handleSquareClick(Position clickedPosition) {

@@ -2,10 +2,12 @@ package com.chessgame.model.movement;
 
 import com.chessgame.model.Board;
 import com.chessgame.model.Move;
+import com.chessgame.model.MoveType;
 import com.chessgame.model.Position;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class SlidingPieceValidator implements MoveValidator{
     // This is for the Queen, Rook, Bishop
@@ -19,15 +21,22 @@ public class SlidingPieceValidator implements MoveValidator{
             Position startSquare = move.getStartPosition();
             Position endSquare = move.getEndPosition();
 
+            /*
+            * If there is no path between start square to the end square (non-inclusive)
+            * then there must be a piece blocking so don't include.
+            * */
             if (!board.isPathClear(startSquare, endSquare)) {
                 continue;
             }
 
+            // End square is free + we already checked there is a clear path
             if (!board.isSquareOccupied(endSquare)) {
                 filteredMoves.add(move);
             }
             else if (board.isSquareOccupied(endSquare) && board.canPieceCapture(startSquare, endSquare)) {
-                filteredMoves.add(move);
+                move.setMoveType(MoveType.CAPTURE);
+                move.setCapturedPiece(Optional.ofNullable(board.getPieceAt(endSquare)));
+                filteredMoves.add(move); // Capture move
             }
         }
         return filteredMoves;

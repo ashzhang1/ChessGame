@@ -61,10 +61,10 @@ public class ChessBoardView extends JPanel implements BoardViewObserver {
         }
     }
 
-    private void handleSquareClick(Position position) {
-        // Notify the game controller that a square has been clicked on.
-        gameController.handleSquareClick(position);
-    }
+//    private void handleSquareClick(Position position) {
+//        // Notify the game controller that a square has been clicked on.
+//        gameController.handleSquareClick(position);
+//    }
 
     public void updateBoard(Board board) {
         for (int rank = 0; rank < ChessConstants.BOARD_SIZE; rank++) {
@@ -137,6 +137,21 @@ public class ChessBoardView extends JPanel implements BoardViewObserver {
         squares[endDisplayRank][endPos.getFile()].addPieceImage(color, pieceCode);
 
 
+    }
+
+    @Override
+    public void disableBoard() {
+        for (int row = 0; row < ChessConstants.BOARD_SIZE; row++) {
+            for (int col = 0; col < ChessConstants.BOARD_SIZE; col++) {
+                squares[row][col].setEnabled(false);
+            }
+        }
+    }
+
+    @Override
+    public void onGameReset(Board board) {
+        onSelectionCleared();
+        updateBoard(board);
     }
 
 

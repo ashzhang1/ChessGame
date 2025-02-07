@@ -181,12 +181,22 @@ public class Board implements IBoard{
 
     }
 
-    public boolean isCheckMate() {
-        return false;
-    }
+    public boolean hasValidMoves(boolean isWhite) {
 
-    public boolean isStaleMate() {
-        return false;
+        List<Move> moves = new ArrayList<>();
+
+        // Iterate over the board and find pieces that belong to player
+        for (int rank = 0; rank < BOARD_SIZE; rank++) {
+            for (int file = 0; file < BOARD_SIZE; file++) {
+                Position pos = new Position(file, rank);
+                Piece piece = board[rank][file];
+                if (piece != null && piece.isWhite == isWhite) {
+                    moves.addAll(getValidMoves(piece, piece.getBasicMoves(pos)));
+                }
+            }
+        }
+
+        return moves.size() != 0;
     }
 
 }
