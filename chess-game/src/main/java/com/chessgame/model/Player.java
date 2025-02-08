@@ -23,6 +23,8 @@ public class Player {
         return score;
     }
 
+    public boolean isWhite() {return isWhite;}
+
     public List<Piece> getCapturedPieces() {
         return List.copyOf(capturedPieces);
     }

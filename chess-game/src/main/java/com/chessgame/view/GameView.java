@@ -11,6 +11,7 @@ public class GameView extends JFrame {
     private static final int BOARD_SIZE = 600;
 
     private ChessBoardView chessBoardView;
+    private GameStatusView gameStatusView;
     private GameController gameController;
 
     public GameView(GameController controller) {
@@ -20,7 +21,7 @@ public class GameView extends JFrame {
         setLayout(new BorderLayout());
         setResizable(false);
 
-        // Initialize the chess board
+        // Initialise the chess board
         chessBoardView = new ChessBoardView(controller);
 
         // Chess Board container
@@ -30,10 +31,13 @@ public class GameView extends JFrame {
         boardContainer.add(chessBoardView, BorderLayout.CENTER);
         add(boardContainer, BorderLayout.WEST);
 
-        // TODO: This space is for the game status view
-        JPanel rightPanel = new JPanel();
-        rightPanel.setPreferredSize(new Dimension(FRAME_WIDTH - BOARD_SIZE, FRAME_HEIGHT));
-        add(rightPanel, BorderLayout.EAST);
+        // Initialise the game status
+        gameStatusView = new GameStatusView(controller);
+
+        JPanel statusContainer = new JPanel();
+        statusContainer.setPreferredSize(new Dimension(FRAME_WIDTH - BOARD_SIZE, FRAME_HEIGHT));
+        statusContainer.add(gameStatusView);
+        add(statusContainer, BorderLayout.EAST);
 
 
         // Game frame size
@@ -46,10 +50,6 @@ public class GameView extends JFrame {
         return chessBoardView;
     }
 
-//    public static void main(String[] args) {
-//        SwingUtilities.invokeLater(() -> {
-//            GameView gameView = new GameView();
-//            gameView.setVisible(true);
-//        });
-//    }
+    public GameStatusView getGameStatusView() {return  gameStatusView;}
+
 }

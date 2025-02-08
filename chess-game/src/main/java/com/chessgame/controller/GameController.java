@@ -2,6 +2,7 @@ package com.chessgame.controller;
 
 import com.chessgame.model.*;
 import com.chessgame.observer.BoardViewObserver;
+import com.chessgame.observer.GameStatusViewObserver;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,8 @@ public class GameController {
     private GameState currState;
     private Position selectedPosition;
     private List<Move> currentValidMoves;
-    private BoardViewObserver observer;
+    private BoardViewObserver boardViewObserverbserver;
+    private GameStatusViewObserver gameStatusViewObserver;
 
     public GameController() {
         this.isWhiteTurn = true;
@@ -33,8 +35,12 @@ public class GameController {
         return gameBoard;
     }
 
-    public void registerObserver(BoardViewObserver observer) {
-        this.observer = observer;
+    public void registerBoardViewObserver(BoardViewObserver boardViewObserverbserver) {
+        this.boardViewObserverbserver = boardViewObserverbserver;
+    }
+
+    public void registerBoardStatusViewObserver(GameStatusViewObserver gameStatusViewObserver) {
+        this.gameStatusViewObserver = gameStatusViewObserver;
     }
 
 
@@ -45,7 +51,7 @@ public class GameController {
         this.whitePlayer.reset();
         this.blackPlayer.reset();
         this.currState = GameState.IN_PROGRESS;
-        observer.onGameReset(gameBoard);
+        boardViewObserverbserver.onGameReset(gameBoard);
     }
 
     public boolean isGameOver() {
@@ -55,6 +61,10 @@ public class GameController {
     public Player getCurrentPlayer() {
         return isWhiteTurn ? whitePlayer : blackPlayer;
     }
+
+    public Player getWhitePlayer() { return whitePlayer; }
+
+    public Player getBlackPlayer() { return blackPlayer; }
 
     public Player getWinner() {
         if (!isGameOver()) {
@@ -68,6 +78,7 @@ public class GameController {
 
     public void switchTurn() {
         isWhiteTurn = !isWhiteTurn;
+        gameStatusViewObserver.updatePlayersTurn();
     }
 
     public void processMove(Position from, Position to) {
@@ -80,7 +91,7 @@ public class GameController {
         Move move = new Move(from, to, piece, Optional.empty(), MoveType.NORMAL);
 
         gameBoard.makeMove(move);
-        observer.onPieceMoved(move);
+        boardViewObserverbserver.onPieceMoved(move);
         moveHistory.add(move);
 
         if (move.getMoveType() == MoveType.CAPTURE) {
@@ -94,6 +105,7 @@ public class GameController {
         Player scoringPlayer = capturedPiece.getIsWhite() ? blackPlayer : whitePlayer;
 
         scoringPlayer.updateScore(capturedPiece.getValue());
+        gameStatusViewObserver.updatePlayersScore();
 
         System.out.println("White player score: " + whitePlayer.getScore());
         System.out.println("Black player score: " + blackPlayer.getScore());
@@ -116,7 +128,7 @@ public class GameController {
                 // Show winner on the UI
 
                 // Disable the board
-                observer.disableBoard();
+                boardViewObserverbserver.disableBoard();
             }
             else {
                 currState = GameState.CHECK;
@@ -129,7 +141,7 @@ public class GameController {
             // Update game status on the UI
 
             // Disable the board
-            observer.disableBoard();
+            boardViewObserverbserver.disableBoard();
         } else {
             currState = GameState.IN_PROGRESS;
             switchTurn();
@@ -166,7 +178,7 @@ public class GameController {
             // Update selection and show new valid moves
             selectedPosition = clickedPosition;
             currentValidMoves = getValidMovesForPiece(clickedPosition);
-            observer.onSquareSelected(clickedPosition, currentValidMoves.stream()
+            boardViewObserverbserver.onSquareSelected(clickedPosition, currentValidMoves.stream()
                     .map(Move::getEndPosition)
                     .collect(Collectors.toList()));
             return;
@@ -181,7 +193,7 @@ public class GameController {
 
         // Case 3: Clicking on invalid square
         clearSelection();
-        observer.onSelectionCleared();
+        boardViewObserverbserver.onSelectionCleared();
     }
 
     private boolean isValidMove(Position endPosition) {
