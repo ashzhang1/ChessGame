@@ -29,6 +29,8 @@ public abstract class Piece {
         return isWhite;
     }
 
+    public abstract PieceValue getValue();
+
     public abstract List<Move> getBasicMoves(Position pos);
 
     @Override

@@ -14,6 +14,9 @@ public class Pawn extends Piece{
     }
 
     @Override
+    public PieceValue getValue() {return PieceValue.PAWN;}
+
+    @Override
     public List<Move> getBasicMoves(Position pos) {
         List<Move> moves = new ArrayList<>();
 

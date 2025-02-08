@@ -61,11 +61,6 @@ public class ChessBoardView extends JPanel implements BoardViewObserver {
         }
     }
 
-//    private void handleSquareClick(Position position) {
-//        // Notify the game controller that a square has been clicked on.
-//        gameController.handleSquareClick(position);
-//    }
-
     public void updateBoard(Board board) {
         for (int rank = 0; rank < ChessConstants.BOARD_SIZE; rank++) {
             for (int file = 0; file < ChessConstants.BOARD_SIZE; file++) {

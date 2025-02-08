@@ -82,6 +82,21 @@ public class GameController {
         gameBoard.makeMove(move);
         observer.onPieceMoved(move);
         moveHistory.add(move);
+
+        if (move.getMoveType() == MoveType.CAPTURE) {
+            updatePlayersScore(move);
+        }
+    }
+
+    public void updatePlayersScore(Move move) {
+
+        Piece capturedPiece = move.getCapturedPiece().get();
+        Player scoringPlayer = capturedPiece.getIsWhite() ? blackPlayer : whitePlayer;
+
+        scoringPlayer.updateScore(capturedPiece.getValue());
+
+        System.out.println("White player score: " + whitePlayer.getScore());
+        System.out.println("Black player score: " + blackPlayer.getScore());
     }
 
     public void updateGameState() {
@@ -94,9 +109,12 @@ public class GameController {
             if (!hasValidMoves) {
                 currState = GameState.CHECKMATE;
                 Player winner = getWinner();
+                System.out.println(winner);
                 System.out.println("CHECKMATE");
                 // Update game status on the UI
+
                 // Show winner on the UI
+
                 // Disable the board
                 observer.disableBoard();
             }
@@ -109,7 +127,9 @@ public class GameController {
         else if (!hasValidMoves) {
             currState = GameState.STALEMATE;
             // Update game status on the UI
+
             // Disable the board
+            observer.disableBoard();
         } else {
             currState = GameState.IN_PROGRESS;
             switchTurn();

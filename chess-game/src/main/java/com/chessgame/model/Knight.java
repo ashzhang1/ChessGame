@@ -20,6 +20,9 @@ public class Knight extends Piece {
     }
 
     @Override
+    public PieceValue getValue() { return PieceValue.KNIGHT;}
+
+    @Override
     public List<Move> getBasicMoves(Position pos) {
         List<Move> moves = new ArrayList<>();
 

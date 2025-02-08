@@ -17,6 +17,9 @@ public class Queen extends Piece {
     }
 
     @Override
+    public PieceValue getValue() {return PieceValue.QUEEN;}
+
+    @Override
     public List<Move> getBasicMoves(Position pos) {
         return moveStrategy.getBasicMoves(pos, this);
     }

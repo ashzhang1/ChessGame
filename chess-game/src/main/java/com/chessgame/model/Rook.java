@@ -17,6 +17,9 @@ public class Rook extends Piece {
     }
 
     @Override
+    public PieceValue getValue() {return PieceValue.ROOK;}
+
+    @Override
     public List<Move> getBasicMoves(Position pos) {
         return moveStrategy.getBasicMoves(pos, this);
     }

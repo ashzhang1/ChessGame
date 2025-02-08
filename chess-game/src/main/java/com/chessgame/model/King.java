@@ -24,6 +24,9 @@ public class King extends Piece{
     }
 
     @Override
+    public PieceValue getValue() {return PieceValue.KING;}
+
+    @Override
     public List<Move> getBasicMoves(Position pos) {
         List<Move> moves = new ArrayList<>();
 

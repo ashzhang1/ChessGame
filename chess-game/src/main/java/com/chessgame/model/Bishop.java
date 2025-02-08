@@ -17,6 +17,9 @@ public class Bishop extends Piece{
     }
 
     @Override
+    public PieceValue getValue() {return PieceValue.BISHOP;}
+
+    @Override
     public List<Move> getBasicMoves(Position pos) {
         return moveStrategy.getBasicMoves(pos, this);
     }
