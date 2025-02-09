@@ -6,7 +6,7 @@ public interface GameStatusViewObserver {
 
     void updatePlayersScore();
 
-//    void updateLastMove();
+    void updateMoveHistory(int moveNum, String player, String moveChessNotation);
 
 //    void updateGameStatus();
 }

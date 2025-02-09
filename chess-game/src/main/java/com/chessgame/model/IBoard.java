@@ -4,11 +4,10 @@ import java.util.*;
 
 public interface IBoard {
 
+    Optional<Position> getPiecePosition(Piece piece);
 
-    public Optional<Position> getPiecePosition(Piece piece);
+    Piece getPieceAt(Position position);
 
-    public Piece getPieceAt(Position position);
-
-    public List<Move> getValidMoves(Piece piece, List<Move> moves);
+    List<Move> getValidMoves(Piece piece, List<Move> moves);
 
 }

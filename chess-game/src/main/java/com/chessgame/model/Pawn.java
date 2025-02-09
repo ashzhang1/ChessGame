@@ -59,4 +59,9 @@ public class Pawn extends Piece{
 
         return moves;
     }
+
+    @Override
+    public String getAbbreviation() {
+        return ""; // Pawn doesn't have abbreviation
+    }
 }

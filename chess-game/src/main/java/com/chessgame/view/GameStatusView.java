@@ -57,6 +57,12 @@ public class GameStatusView extends JPanel implements GameStatusViewObserver {
         blackPlayerPanel.updateScore(blackScore);
     }
 
+    @Override
+    public void updateMoveHistory(int moveNum, String player, String moveChessNotation) {
+        String moveText = moveNum + ". " + player + " played " + moveChessNotation;
+        moveHistoryPanel.addMove(moveText);
+    }
+
 
 
 

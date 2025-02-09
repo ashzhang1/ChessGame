@@ -35,8 +35,8 @@ public class GameController {
         return gameBoard;
     }
 
-    public void registerBoardViewObserver(BoardViewObserver boardViewObserverbserver) {
-        this.boardViewObserverbserver = boardViewObserverbserver;
+    public void registerBoardViewObserver(BoardViewObserver boardViewObserver) {
+        this.boardViewObserverbserver = boardViewObserver;
     }
 
     public void registerBoardStatusViewObserver(GameStatusViewObserver gameStatusViewObserver) {
@@ -92,7 +92,7 @@ public class GameController {
 
         gameBoard.makeMove(move);
         boardViewObserverbserver.onPieceMoved(move);
-        moveHistory.add(move);
+        updateMoveHistory(move);
 
         if (move.getMoveType() == MoveType.CAPTURE) {
             updatePlayersScore(move);
@@ -109,6 +109,16 @@ public class GameController {
 
         System.out.println("White player score: " + whitePlayer.getScore());
         System.out.println("Black player score: " + blackPlayer.getScore());
+    }
+
+    public void updateMoveHistory(Move move) {
+        moveHistory.add(move);
+
+        int moveNum = (moveHistory.size() + 2 - 1) / 2;
+        String player = move.getMovedPiece().getIsWhite() ? whitePlayer.toString() : blackPlayer.toString();
+        String chessNotationMove = move.getChessNotation();
+
+        gameStatusViewObserver.updateMoveHistory(moveNum, player, chessNotationMove);
     }
 
     public void updateGameState() {

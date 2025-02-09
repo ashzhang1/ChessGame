@@ -60,10 +60,6 @@ public class Position {
         return pos.getRank() - this.rank;
     }
 
-    public boolean moveWithinBounds() {
-        return file >= 0 && file <= 7 && rank >= 0 && rank <= 7;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (o instanceof Position) {

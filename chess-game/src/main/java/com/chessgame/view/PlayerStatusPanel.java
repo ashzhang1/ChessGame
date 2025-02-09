@@ -25,7 +25,7 @@ public class PlayerStatusPanel extends JPanel {
         squarePanel.setPreferredSize(new Dimension(50, 50));
 
         JPanel scorePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        scorePanel.setPreferredSize(new Dimension(100, 35));
+        scorePanel.setPreferredSize(new Dimension(120, 35));
 
         JPanel indicatorPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         indicatorPanel.setPreferredSize(new Dimension(50, 50));

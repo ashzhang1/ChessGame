@@ -64,5 +64,10 @@ public class Player {
         score = 0;
     }
 
+    @Override
+    public String toString() {
+        return isWhite ? "White" : "Black";
+    }
+
 
 }

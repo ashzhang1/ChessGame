@@ -1,6 +1,5 @@
 package com.chessgame.model;
 
-import com.chessgame.model.movement.IMoveStrategy;
 import com.chessgame.model.movement.MoveValidator;
 
 import java.util.List;
@@ -32,6 +31,8 @@ public abstract class Piece {
     public abstract PieceValue getValue();
 
     public abstract List<Move> getBasicMoves(Position pos);
+
+    public abstract String getAbbreviation();
 
     @Override
     public int hashCode() {

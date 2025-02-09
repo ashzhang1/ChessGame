@@ -23,4 +23,9 @@ public class Rook extends Piece {
     public List<Move> getBasicMoves(Position pos) {
         return moveStrategy.getBasicMoves(pos, this);
     }
+
+    @Override
+    public String getAbbreviation() {
+        return "R"; // Pawn doesn't have abbreviation
+    }
 }

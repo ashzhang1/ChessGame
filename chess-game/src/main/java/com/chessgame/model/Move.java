@@ -48,4 +48,14 @@ public class Move {
     public void setMoveType(MoveType type) {
         moveType = type;
     }
+
+
+    public String getChessNotation() {
+        String endFile = String.valueOf((char) ('A' + endPosition.getFile()));
+        int endRank = endPosition.getRank() + 1;
+
+        String pieceAbbreviation = movedPiece.getAbbreviation();
+
+        return pieceAbbreviation + endFile + endRank;
+    }
 }
