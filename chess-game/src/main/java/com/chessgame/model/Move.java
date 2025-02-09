@@ -50,12 +50,20 @@ public class Move {
     }
 
 
-    public String getChessNotation() {
+    public String getChessNotation(GameState state) {
+        String stateString = "";
+        if (state == GameState.CHECKMATE) {
+            stateString = "#";
+        }
+        else if (state == GameState.CHECK) {
+            stateString = "+";
+        }
+
         String endFile = String.valueOf((char) ('A' + endPosition.getFile()));
         int endRank = endPosition.getRank() + 1;
 
         String pieceAbbreviation = movedPiece.getAbbreviation();
 
-        return pieceAbbreviation + endFile + endRank;
+        return pieceAbbreviation + endFile + endRank + stateString;
     }
 }

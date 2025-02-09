@@ -82,17 +82,18 @@ public class GameController {
     }
 
     public void processMove(Position from, Position to) {
-        executeMoveLogic(from, to);
-        updateGameState();
-    }
 
-    public void executeMoveLogic(Position from, Position to) {
         Piece piece = gameBoard.getPieceAt(from);
         Move move = new Move(from, to, piece, Optional.empty(), MoveType.NORMAL);
 
+        executeMoveLogic(move);
+        updateGameState();
+        updateMoveHistory(move);
+    }
+
+    public void executeMoveLogic(Move move) {
         gameBoard.makeMove(move);
         boardViewObserverbserver.onPieceMoved(move);
-        updateMoveHistory(move);
 
         if (move.getMoveType() == MoveType.CAPTURE) {
             updatePlayersScore(move);
@@ -116,9 +117,9 @@ public class GameController {
 
         int moveNum = (moveHistory.size() + 2 - 1) / 2;
         String player = move.getMovedPiece().getIsWhite() ? whitePlayer.toString() : blackPlayer.toString();
-        String chessNotationMove = move.getChessNotation();
+        String chessNotationMove = move.getChessNotation(currState);
 
-        gameStatusViewObserver.updateMoveHistory(moveNum, player, chessNotationMove);
+        gameStatusViewObserver.updateMoveHistory(moveNum, player, chessNotationMove, currState);
     }
 
     public void updateGameState() {
@@ -130,25 +131,22 @@ public class GameController {
         if (isInCheck) {
             if (!hasValidMoves) {
                 currState = GameState.CHECKMATE;
-                Player winner = getWinner();
-                System.out.println(winner);
-                System.out.println("CHECKMATE");
-                // Update game status on the UI
 
                 // Show winner on the UI
+                Player winner = getWinner();
+                System.out.println("This is winner: " + winner);
+                System.out.println("CHECKMATE");
 
                 // Disable the board
                 boardViewObserverbserver.disableBoard();
             }
             else {
                 currState = GameState.CHECK;
-                // Update game status on the UI
                 switchTurn();
             }
         }
         else if (!hasValidMoves) {
             currState = GameState.STALEMATE;
-            // Update game status on the UI
 
             // Disable the board
             boardViewObserverbserver.disableBoard();

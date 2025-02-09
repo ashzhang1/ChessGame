@@ -40,6 +40,10 @@ public class GameView extends JFrame {
         add(statusContainer, BorderLayout.EAST);
 
 
+        // New game button
+        
+
+
         // Game frame size
         setPreferredSize(new Dimension(FRAME_WIDTH, FRAME_HEIGHT));
         pack();

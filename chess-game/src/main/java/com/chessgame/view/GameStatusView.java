@@ -1,6 +1,7 @@
 package com.chessgame.view;
 
 import com.chessgame.controller.GameController;
+import com.chessgame.model.GameState;
 import com.chessgame.observer.GameStatusViewObserver;
 
 import javax.swing.*;
@@ -58,8 +59,16 @@ public class GameStatusView extends JPanel implements GameStatusViewObserver {
     }
 
     @Override
-    public void updateMoveHistory(int moveNum, String player, String moveChessNotation) {
-        String moveText = moveNum + ". " + player + " played " + moveChessNotation;
+    public void updateMoveHistory(int moveNum, String player, String moveChessNotation, GameState state) {
+        String moveText;
+        if (state == GameState.IN_PROGRESS) {
+            moveText = moveNum + ". " + player + " played " + moveChessNotation;
+        }
+        else {
+            moveText = String.format("%d. %s played %s - <font color='orange'>%s</font>",
+                    moveNum, player, moveChessNotation, state);
+            moveText = "<html>" + moveText + "</html>";
+        }
         moveHistoryPanel.addMove(moveText);
     }
 
