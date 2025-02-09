@@ -9,6 +9,5 @@ public interface GameStatusViewObserver {
     void updatePlayersScore();
 
     void updateMoveHistory(int moveNum, String player, String moveChessNotation, GameState State);
-
-//    void updateGameStatus();
+    void onGameReset();
 }

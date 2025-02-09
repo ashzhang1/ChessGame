@@ -184,7 +184,7 @@ public class ChessBoardView extends JPanel implements BoardViewObserver {
             addMouseListener(new MouseAdapter() {
                 @Override
                 public void mousePressed(MouseEvent e) {
-                    System.out.println("MOUSE PRESS RECEIVED at square " + getChessNotation());
+//                    System.out.println("MOUSE PRESS RECEIVED at square " + getChessNotation());
                     int gameRow = ChessConstants.BOARD_SIZE - 1 - row;
                     Position clickedPosition = new Position(col, gameRow);
                     handleSquareClick(clickedPosition);
@@ -193,7 +193,7 @@ public class ChessBoardView extends JPanel implements BoardViewObserver {
         }
 
         private void handleSquareClick(Position position) {
-            System.out.println("CHESS BOARD VIEW received click at: " + position.getFile() + "," + position.getRank());
+//            System.out.println("CHESS BOARD VIEW received click at: " + position.getFile() + "," + position.getRank());
             gameController.handleSquareClick(position);
         }
 

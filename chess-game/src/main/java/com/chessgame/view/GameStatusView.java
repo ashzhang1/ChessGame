@@ -64,12 +64,27 @@ public class GameStatusView extends JPanel implements GameStatusViewObserver {
         if (state == GameState.IN_PROGRESS) {
             moveText = moveNum + ". " + player + " played " + moveChessNotation;
         }
+        else if (state == GameState.CHECKMATE) {
+            moveText = String.format("%d. %s played %s <font color='orange'>%s - %s wins</font>",
+                    moveNum, player, moveChessNotation, state, player);
+            moveText = "<html>" + moveText + "</html>";
+        }
         else {
-            moveText = String.format("%d. %s played %s - <font color='orange'>%s</font>",
+            moveText = String.format("%d. %s played %s <font color='orange'>%s</font>",
                     moveNum, player, moveChessNotation, state);
             moveText = "<html>" + moveText + "</html>";
         }
         moveHistoryPanel.addMove(moveText);
+    }
+
+    @Override
+    public void onGameReset() {
+        whitePlayerPanel.updateScore(0);
+        blackPlayerPanel.updateScore(0);
+        moveHistoryPanel.clearMoveHistory();
+        updatePlayersTurn();
+
+
     }
 
 

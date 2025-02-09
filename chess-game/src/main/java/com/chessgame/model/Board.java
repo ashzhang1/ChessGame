@@ -73,10 +73,7 @@ public class Board implements IBoard{
 
     public List<Move> getValidMoves(Piece piece, List<Move> moves) {
 
-//        System.out.println("Starting with moves: " + moves.size());
-
         List<Move> validMoves = piece.moveValidator.filterValidMoves(moves, this);
-//        System.out.println("After move validator: " + validMoves.size());
 
         // Filter out moves that leave king in check
         List<Move> finalValidMoves = new ArrayList<>();
@@ -89,7 +86,6 @@ public class Board implements IBoard{
             undoMove(move);
         }
 
-//        System.out.println("After king check filter: " + finalValidMoves.size());
         return finalValidMoves;
     }
 

@@ -43,7 +43,6 @@ public class GameController {
         this.gameStatusViewObserver = gameStatusViewObserver;
     }
 
-
     public void startNewGame() {
         this.isWhiteTurn = true;
         this.moveHistory.clear();
@@ -52,6 +51,7 @@ public class GameController {
         this.blackPlayer.reset();
         this.currState = GameState.IN_PROGRESS;
         boardViewObserverbserver.onGameReset(gameBoard);
+        gameStatusViewObserver.onGameReset();
     }
 
     public boolean isGameOver() {
@@ -66,14 +66,13 @@ public class GameController {
 
     public Player getBlackPlayer() { return blackPlayer; }
 
-    public Player getWinner() {
+    public Player getWinner(Move winningMove) {
         if (!isGameOver()) {
             throw new IllegalStateException("Cannot get winner - game is not over");
         }
 
-        Move lastMove = moveHistory.get(moveHistory.size() - 1);
-        Piece lastMovedPiece = lastMove.getMovedPiece();
-        return lastMovedPiece.getIsWhite() ? whitePlayer : blackPlayer;
+        Piece winningPiece = winningMove.getMovedPiece();
+        return winningPiece.getIsWhite() ? whitePlayer : blackPlayer;
     }
 
     public void switchTurn() {
@@ -87,7 +86,7 @@ public class GameController {
         Move move = new Move(from, to, piece, Optional.empty(), MoveType.NORMAL);
 
         executeMoveLogic(move);
-        updateGameState();
+        updateGameState(move);
         updateMoveHistory(move);
     }
 
@@ -107,9 +106,6 @@ public class GameController {
 
         scoringPlayer.updateScore(capturedPiece.getValue());
         gameStatusViewObserver.updatePlayersScore();
-
-        System.out.println("White player score: " + whitePlayer.getScore());
-        System.out.println("Black player score: " + blackPlayer.getScore());
     }
 
     public void updateMoveHistory(Move move) {
@@ -122,7 +118,7 @@ public class GameController {
         gameStatusViewObserver.updateMoveHistory(moveNum, player, chessNotationMove, currState);
     }
 
-    public void updateGameState() {
+    public void updateGameState(Move move) {
 
         // Check if the opposition is in check and has any valid moves
         boolean isInCheck = gameBoard.isKingInCheck(!isWhiteTurn);
@@ -131,11 +127,6 @@ public class GameController {
         if (isInCheck) {
             if (!hasValidMoves) {
                 currState = GameState.CHECKMATE;
-
-                // Show winner on the UI
-                Player winner = getWinner();
-                System.out.println("This is winner: " + winner);
-                System.out.println("CHECKMATE");
 
                 // Disable the board
                 boardViewObserverbserver.disableBoard();
@@ -163,7 +154,6 @@ public class GameController {
 
     public List<Move> getValidMovesForPiece(Position position) {
         Piece piece = gameBoard.getPieceAt(position);
-        System.out.println("Getting moves for piece: " + piece);
 
         // Invalid square or piece
         if (piece == null || piece.getIsWhite() != isWhiteTurn) {

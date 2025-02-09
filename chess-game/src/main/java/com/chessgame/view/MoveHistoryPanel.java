@@ -54,4 +54,10 @@ public class MoveHistoryPanel extends JPanel{
         });
     }
 
+    public void clearMoveHistory() {
+        contentPanel.removeAll();
+        contentPanel.revalidate();
+        contentPanel.repaint();
+    }
+
 }
