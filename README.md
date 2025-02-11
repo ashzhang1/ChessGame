@@ -3,10 +3,10 @@ A Java implementation of chess that demonstrates core object-oriented programmin
 This project features core chess mechanics including a clean graphical user interface, and game state management with 
 move history tracking.
 
-![](../../Chess-Programming/chess_screenshots/screenshot1.png)
+![](screenshots/start.png)
 
 ## Example: Fool's Mate 😄
-![Alt text](../../Chess-Programming/foolsmate.gif)
+![Alt text](screenshots/foolsmate.gif)
 
 
 ## Key Features
@@ -57,19 +57,19 @@ This project implements the Model-View-Controller (MVC) architectural pattern:
   - Separates complex validation logic (blocked paths, captures, check conditions) from piece behavior and also groups
   common validation rules (i.e., all sliding pieces share the same validation).
 
-![](../../Chess-Programming/chess_screenshots/strategy.png)
+![](screenshots/strategy.png)
 
 ### 2. Factory Pattern:
 - PieceFactory for creating chess pieces which makes the board initialisation cleaner.
 
-![](../../Chess-Programming/chess_screenshots/factory.png)
+![](screenshots/factory.png)
 
 ### 3. Observer Pattern:
 - BoardViewObserver for board state changes
 - GameStatusViewObserver for game state updates
 - Loose coupling between the game logic and UI
 
-![](../../Chess-Programming/chess_screenshots/observer.png)
+![](screenshots/observer.png)
 
 ### 4. Composite Pattern:
 - CompositeMoveStrategy combines multiple movement strategies. This is used for the Queen that combine 
