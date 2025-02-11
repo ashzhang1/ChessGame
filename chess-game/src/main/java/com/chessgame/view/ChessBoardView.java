@@ -201,12 +201,6 @@ public class ChessBoardView extends JPanel implements BoardViewObserver {
             return (row + col) % 2 == 0;
         }
 
-        public String getChessNotation() {
-            char file = (char) ('A' + col);
-            int rank = 8 - row;
-            return String.format("%c%d", file, rank);
-        }
-
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);

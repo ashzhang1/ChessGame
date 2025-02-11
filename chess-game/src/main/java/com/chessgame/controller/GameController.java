@@ -18,7 +18,7 @@ public class GameController {
     private GameState currState;
     private Position selectedPosition;
     private List<Move> currentValidMoves;
-    private BoardViewObserver boardViewObserverbserver;
+    private BoardViewObserver boardViewObserver;
     private GameStatusViewObserver gameStatusViewObserver;
 
     public GameController() {
@@ -36,7 +36,7 @@ public class GameController {
     }
 
     public void registerBoardViewObserver(BoardViewObserver boardViewObserver) {
-        this.boardViewObserverbserver = boardViewObserver;
+        this.boardViewObserver = boardViewObserver;
     }
 
     public void registerBoardStatusViewObserver(GameStatusViewObserver gameStatusViewObserver) {
@@ -50,7 +50,7 @@ public class GameController {
         this.whitePlayer.reset();
         this.blackPlayer.reset();
         this.currState = GameState.IN_PROGRESS;
-        boardViewObserverbserver.onGameReset(gameBoard);
+        boardViewObserver.onGameReset(gameBoard);
         gameStatusViewObserver.onGameReset();
     }
 
@@ -75,7 +75,7 @@ public class GameController {
         return winningPiece.getIsWhite() ? whitePlayer : blackPlayer;
     }
 
-    public void switchTurn() {
+    private void switchTurn() {
         isWhiteTurn = !isWhiteTurn;
         gameStatusViewObserver.updatePlayersTurn();
     }
@@ -92,7 +92,7 @@ public class GameController {
 
     public void executeMoveLogic(Move move) {
         gameBoard.makeMove(move);
-        boardViewObserverbserver.onPieceMoved(move);
+        boardViewObserver.onPieceMoved(move);
 
         if (move.getMoveType() == MoveType.CAPTURE) {
             updatePlayersScore(move);
@@ -129,7 +129,7 @@ public class GameController {
                 currState = GameState.CHECKMATE;
 
                 // Disable the board
-                boardViewObserverbserver.disableBoard();
+                boardViewObserver.disableBoard();
             }
             else {
                 currState = GameState.CHECK;
@@ -140,7 +140,7 @@ public class GameController {
             currState = GameState.STALEMATE;
 
             // Disable the board
-            boardViewObserverbserver.disableBoard();
+            boardViewObserver.disableBoard();
         } else {
             currState = GameState.IN_PROGRESS;
             switchTurn();
@@ -176,7 +176,7 @@ public class GameController {
             // Update selection and show new valid moves
             selectedPosition = clickedPosition;
             currentValidMoves = getValidMovesForPiece(clickedPosition);
-            boardViewObserverbserver.onSquareSelected(clickedPosition, currentValidMoves.stream()
+            boardViewObserver.onSquareSelected(clickedPosition, currentValidMoves.stream()
                     .map(Move::getEndPosition)
                     .collect(Collectors.toList()));
             return;
@@ -191,7 +191,7 @@ public class GameController {
 
         // Case 3: Clicking on invalid square
         clearSelection();
-        boardViewObserverbserver.onSelectionCleared();
+        boardViewObserver.onSelectionCleared();
     }
 
     private boolean isValidMove(Position endPosition) {
