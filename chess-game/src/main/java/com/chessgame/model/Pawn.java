@@ -64,6 +64,4 @@ public class Pawn extends Piece{
     public String getAbbreviation() {
         return ""; // Pawn doesn't have abbreviation
     }
-
-    // Testing new branch
 }

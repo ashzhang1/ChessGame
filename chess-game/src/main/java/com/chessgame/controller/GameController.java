@@ -58,14 +58,6 @@ public class GameController {
         return (currState == GameState.CHECKMATE || currState == GameState.STALEMATE);
     }
 
-    public Player getCurrentPlayer() {
-        return isWhiteTurn ? whitePlayer : blackPlayer;
-    }
-
-    public Player getWhitePlayer() { return whitePlayer; }
-
-    public Player getBlackPlayer() { return blackPlayer; }
-
     public Player getWinner(Move winningMove) {
         if (!isGameOver()) {
             throw new IllegalStateException("Cannot get winner - game is not over");
@@ -77,7 +69,7 @@ public class GameController {
 
     private void switchTurn() {
         isWhiteTurn = !isWhiteTurn;
-        gameStatusViewObserver.updatePlayersTurn();
+        gameStatusViewObserver.updatePlayersTurn(isWhiteTurn);
     }
 
     public void processMove(Position from, Position to) {
@@ -105,7 +97,7 @@ public class GameController {
         Player scoringPlayer = capturedPiece.getIsWhite() ? blackPlayer : whitePlayer;
 
         scoringPlayer.updateScore(capturedPiece.getValue());
-        gameStatusViewObserver.updatePlayersScore();
+        gameStatusViewObserver.updatePlayersScore(whitePlayer.getScore(), blackPlayer.getScore());
     }
 
     public void updateMoveHistory(Move move) {

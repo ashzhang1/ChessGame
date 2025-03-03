@@ -1,6 +1,6 @@
 package com.chessgame.view;
 
-import com.chessgame.controller.GameController;
+import com.chessgame.commands.CommandHandler;
 import com.chessgame.model.Board;
 import com.chessgame.model.Move;
 import com.chessgame.model.Piece;
@@ -30,20 +30,18 @@ public class ChessBoardView extends JPanel implements BoardViewObserver {
         PIECE_CODES.put("king", "K");
     }
 
-
     private final SquarePanel[][] squares;
     private final Color lightSquareColor;
     private final Color darkSquareColor;
     private final Color highlightedSquareColor;
-    private GameController gameController;
+    private CommandHandler commandHandler;
 
-
-    public ChessBoardView(GameController controller) {
+    public ChessBoardView(CommandHandler commandHandler) {
         this.lightSquareColor = new Color(230, 215, 240);
         this.darkSquareColor = new Color(150, 120, 180);
         this.highlightedSquareColor = new Color(242, 242, 136);
         this.squares = new SquarePanel[ChessConstants.BOARD_SIZE][ChessConstants.BOARD_SIZE];
-        this.gameController = controller;
+        this.commandHandler = commandHandler;
         setupBoard();
     }
 
@@ -194,7 +192,7 @@ public class ChessBoardView extends JPanel implements BoardViewObserver {
 
         private void handleSquareClick(Position position) {
 //            System.out.println("CHESS BOARD VIEW received click at: " + position.getFile() + "," + position.getRank());
-            gameController.handleSquareClick(position);
+            commandHandler.handleSquareClick(position);
         }
 
         private boolean isLightSquare() {

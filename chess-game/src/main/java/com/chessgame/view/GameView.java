@@ -1,6 +1,6 @@
 package com.chessgame.view;
 
-import com.chessgame.controller.GameController;
+import com.chessgame.commands.CommandHandler;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,17 +12,17 @@ public class GameView extends JFrame {
 
     private ChessBoardView chessBoardView;
     private GameStatusView gameStatusView;
-    private GameController gameController;
+    private CommandHandler commandHandler;
 
-    public GameView(GameController controller) {
-        this.gameController = controller;
+    public GameView(CommandHandler commandHandler) {
+        this.commandHandler = commandHandler;
         setTitle("Chess Game");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
         setResizable(false);
 
         // Initialise the chess board
-        chessBoardView = new ChessBoardView(controller);
+        chessBoardView = new ChessBoardView(commandHandler);
 
         // Chess board container
         JPanel boardContainer = new JPanel();
@@ -37,7 +37,7 @@ public class GameView extends JFrame {
         statusContainer.setPreferredSize(new Dimension(FRAME_WIDTH - BOARD_SIZE, FRAME_HEIGHT));
 
         // Game status view on top
-        gameStatusView = new GameStatusView(controller);
+        gameStatusView = new GameStatusView();
         JPanel statusWrapper = new JPanel();
         statusWrapper.add(gameStatusView);
         statusContainer.add(statusWrapper);
@@ -61,8 +61,7 @@ public class GameView extends JFrame {
 
         // Start new game button action
         newGameButton.addActionListener(e -> {
-            gameController.startNewGame();
-            chessBoardView.updateBoard(gameController.getBoard());
+            this.commandHandler.handleNewGame();
         });
 
         // Game frame size
