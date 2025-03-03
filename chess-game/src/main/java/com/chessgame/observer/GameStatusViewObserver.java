@@ -4,9 +4,9 @@ import com.chessgame.model.GameState;
 
 public interface GameStatusViewObserver {
 
-    void updatePlayersTurn();
+    void updatePlayersTurn(boolean isWhiteTurn);
 
-    void updatePlayersScore();
+    void updatePlayersScore(int whiteScore, int blackScore);
 
     void updateMoveHistory(int moveNum, String player, String moveChessNotation, GameState state);
     void onGameReset();

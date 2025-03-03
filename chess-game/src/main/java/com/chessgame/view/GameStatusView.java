@@ -1,6 +1,4 @@
 package com.chessgame.view;
-
-import com.chessgame.controller.GameController;
 import com.chessgame.model.GameState;
 import com.chessgame.observer.GameStatusViewObserver;
 
@@ -8,14 +6,12 @@ import javax.swing.*;
 import java.awt.*;
 
 public class GameStatusView extends JPanel implements GameStatusViewObserver {
-    private GameController gameController;
     private final PlayerStatusPanel whitePlayerPanel;
     private final PlayerStatusPanel blackPlayerPanel;
 
     private final MoveHistoryPanel moveHistoryPanel;
 
-    public GameStatusView(GameController gameController) {
-        this.gameController = gameController;
+    public GameStatusView() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         // Create player panels
@@ -44,16 +40,13 @@ public class GameStatusView extends JPanel implements GameStatusViewObserver {
     }
 
     @Override
-    public void updatePlayersTurn() {
-        boolean isWhiteTurn = gameController.getCurrentPlayer().isWhite();
+    public void updatePlayersTurn(boolean isWhiteTurn) {
         whitePlayerPanel.updateTurn(isWhiteTurn);
         blackPlayerPanel.updateTurn(!isWhiteTurn);
     }
 
     @Override
-    public void updatePlayersScore() {
-        int whiteScore = gameController.getWhitePlayer().getScore();
-        int blackScore = gameController.getBlackPlayer().getScore();
+    public void updatePlayersScore(int whiteScore, int blackScore) {
         whitePlayerPanel.updateScore(whiteScore);
         blackPlayerPanel.updateScore(blackScore);
     }
@@ -82,8 +75,7 @@ public class GameStatusView extends JPanel implements GameStatusViewObserver {
         whitePlayerPanel.updateScore(0);
         blackPlayerPanel.updateScore(0);
         moveHistoryPanel.clearMoveHistory();
-        updatePlayersTurn();
-
+        updatePlayersTurn(true);
 
     }
 
