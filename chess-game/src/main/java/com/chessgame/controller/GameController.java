@@ -160,6 +160,8 @@ public class GameController {
     }
 
     public void handleSquareClick(Position clickedPosition) {
+        if (isGameOver()) return;
+
         Piece clickedPiece = gameBoard.getPieceAt(clickedPosition);
 
         // Case 1: Clicking on own piece
