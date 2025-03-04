@@ -69,7 +69,7 @@ This project implements the Model-View-Controller (MVC) architectural pattern:
 - GameStatusViewObserver for game state updates
 - Loose coupling between the game logic and UI
 
-![](screenshots/observer.png)
+![](screenshots/observer.png?v=2)
 
 ### 4. Composite Pattern:
 - CompositeMoveStrategy combines multiple movement strategies. This is used for the Queen that combine 
